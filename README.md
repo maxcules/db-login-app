@@ -153,7 +153,6 @@ Authentication
 *   The token must be sent in authenticated requests using the Authorization header
     
 
-Authorization: Bearer
 
 Logging and Monitoring
 ----------------------
@@ -210,11 +209,12 @@ Database Initialization
 *   The backend starts only after the database is ready
     
 
-To reset the database and all data:
-```docker compose down -v```
 
 Stopping the Application
 ------------------------
 
 To stop all services:
 ```docker compose down```
+
+To reset the database and all data:
+```docker compose down -v```
