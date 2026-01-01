@@ -79,6 +79,43 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
+  # ---- TiCDC ----
+  ticdc:
+    image: pingcap/ticdc:v7.5.0
+    depends_on:
+      - pd
+      - tikv
+      - tidb
+      - kafka
+    command:
+      - /cdc
+      - server
+      - --pd=http://pd:2379
+      - --addr=0.0.0.0:8300
+      - --advertise-addr=ticdc:8300
+      - --log-file=/dev/stderr
+    ports:
+      - "8300:8300"
+
+  cdc-init:
+    image: pingcap/ticdc:v7.5.0
+    depends_on:
+      - ticdc
+      - kafka
+    volumes:
+      - ./cdc:/cdc-init:ro
+    entrypoint: ["/bin/sh", "/cdc-init/init.sh"]
+    restart: "no"
+
+  consumer:
+    build: ./consumer
+    depends_on:
+      - cdc-init
+    environment:
+      KAFKA_BROKER: kafka:9092
+      KAFKA_TOPIC: tidb_cdc
+      GROUP_ID: cdc-consumer-group
+
   # ---- Backend API ----
   api:
     build: ./backend
