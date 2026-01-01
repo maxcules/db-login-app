@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const adminRoutes = require("./routes/admin.routes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/health", (req, res) => res.json({ ok: true }));
 // Routes
 app.use(authRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
 
 // Basic error handler so the process doesn't crash on runtime errors
 app.use((err, req, res, next) => {
