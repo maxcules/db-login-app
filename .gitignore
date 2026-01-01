@@ -10,9 +10,8 @@
 
 !*.json
 !*.js
-!*.toml
-!*.sqp
-!.sh
+!*.sql
+!*.sh
 
 !*.md
 

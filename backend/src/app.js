@@ -23,4 +23,10 @@ app.get("/health", (req, res) => res.json({ ok: true }));
 app.use(authRoutes);
 app.use(userRoutes);
 
+// Basic error handler so the process doesn't crash on runtime errors
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
 module.exports = app;
